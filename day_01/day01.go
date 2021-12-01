@@ -18,7 +18,7 @@ func main() {
 	fileHandle, _ := os.Open(path)
 	defer fileHandle.Close()
 
-	que := []int{0, 0, 0}
+	queue := []int{0, 0, 0}
 	previous1, previous2 := 0, 0
 	ans1 := 0
 	ans2 := 0
@@ -31,7 +31,7 @@ func main() {
 			ans1++
 		}
 
-		curB := addToQue(que, cur)
+		curB := addToQue(queue, cur)
 		if curB > previous2 {
 			ans2++
 		}
