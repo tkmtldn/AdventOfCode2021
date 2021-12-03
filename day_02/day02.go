@@ -33,6 +33,6 @@ func main() {
 			depth1 -= move
 		}
 	}
-	fmt.Printf("First answer: : %v \n", horizontal * depth1)
-	fmt.Printf("Second answer: : %v \n", horizontal * depth2)
+	fmt.Printf("First answer: %v \n", horizontal * depth1)
+	fmt.Printf("Second answer: %v \n", horizontal * depth2)
 }
