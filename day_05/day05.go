@@ -34,40 +34,15 @@ func prepareData(reader io.Reader) (output []coordinates) {
 	return
 }
 
-func out1(coo []coordinates) (ans int) {
-	problem := map[string]int{}
-
-	for _, c := range coo {
-		if c.y1 == c.y2 {
-			if c.x1 < c.x2 {
-				for x := c.x1; x <= c.x2; x++ {
-					checkInMap(problem, x, c.y1)
-				}
-			} else {
-				for x := c.x1; x >= c.x2; x-- {
-					checkInMap(problem, x, c.y1)
-				}
-			}
-		}
-		if c.x1 == c.x2 {
-			if c.y1 < c.y2 {
-				for y := c.y1; y <= c.y2; y++ {
-					checkInMap(problem, c.x1, y)
-				}
-			} else {
-				for y := c.y1; y >= c.y2; y-- {
-					checkInMap(problem, c.x1, y)
-				}
-			}
-		}
-	}
+func out1(coo []coordinates) (result int) {
+	problem := linearCount(coo)
 
 	for _, v := range problem {
 		if v > 0 {
-			ans ++
+			result ++
 		}
 	}
-	return ans
+	return result
 
 }
 
@@ -80,7 +55,7 @@ func checkInMap(problem map[string]int, x int, y int) {
 	}
 }
 
-func out2(coo []coordinates) (ans int) {
+func linearCount(coo []coordinates) map[string]int{
 	problem := map[string]int{}
 
 	for _, c := range coo {
@@ -106,6 +81,15 @@ func out2(coo []coordinates) (ans int) {
 				}
 			}
 		}
+	}
+	return problem
+}
+
+func out2(coo []coordinates) (result int) {
+	problem := linearCount(coo)
+
+	//diagonalCount
+	for _, c := range coo {
 		if math.Abs(float64(c.x1)-float64(c.x2)) == math.Abs(float64(c.y1)-float64(c.y2)) {
 
 			if c.x1 > c.x2 && c.y1 > c.y2 {
@@ -134,10 +118,10 @@ func out2(coo []coordinates) (ans int) {
 
 	for _, v := range problem {
 		if v > 0 {
-			ans ++
+			result ++
 		}
 	}
-	return ans
+	return result
 }
 
 func main() {
