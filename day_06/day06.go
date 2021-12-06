@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func prepareData(reader io.Reader) ([]int, int) {
+func prepareData(reader io.Reader) []int {
 	tmp := []string{}
 	data := make([]int, 9)
 
@@ -24,25 +24,31 @@ func prepareData(reader io.Reader) ([]int, int) {
 		v, _ := strconv.Atoi(raw)
 		data[v] += 1
 	}
-	return data, len(tmp)
+	return data
 }
 
-func lanternfish(inp []int, a int, days int) int {
-	addition := 0
+func lanternfish(inp []int, days int) int {
 	for x := 0; x < days; x++ {
 		new_inp := make([]int, 9)
 		for k, v := range inp {
 			if k == 0 {
 				new_inp[8] += v
 				new_inp[6] += v
-				addition += v
 			} else {
 				new_inp[k-1] += v
 			}
 		}
 		inp = new_inp
 	}
-	return addition + a
+	return sumArray(inp...)
+}
+
+func sumArray(numbs ...int) int {
+	result := 0
+	for _, numb := range numbs {
+		result += numb
+	}
+	return result
 }
 
 func main() {
@@ -50,8 +56,8 @@ func main() {
 	fileHandle, _ := os.Open(path)
 	defer fileHandle.Close()
 
-	data, i := prepareData(fileHandle)
+	data := prepareData(fileHandle)
 
-	fmt.Printf("First answer: %v \n", lanternfish(data, i, 80))
-	fmt.Printf("Second answer: %v \n", lanternfish(data, i, 256))
+	fmt.Printf("First answer: %v \n", lanternfish(data, 80))
+	fmt.Printf("Second answer: %v \n", lanternfish(data, 256))
 }
