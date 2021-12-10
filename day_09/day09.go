@@ -46,25 +46,34 @@ func checkLowest(data [][]string, y int, x int) bool {
 	return s == 4
 }
 
-func sumLowPoints(data [][]string) (int, [][]int) {
-	sum := 0
+func heightmapLowPoints(data [][]string) (sum int) {
+	lowestPoints := getLowestPoints(data)
+
+	for _,v := range lowestPoints{
+		i, _ := strconv.Atoi(data[v[0]][v[1]])
+		sum += i + 1
+	}
+
+	return sum
+}
+
+func getLowestPoints(data [][]string) [][]int {
 	lowestPoints := [][]int{}
 	for k1, v1 := range data {
-		for k2, _ := range (v1) {
-			ans := checkLowest(data, k1, k2)
-			if ans == true {
-				i, _ := strconv.Atoi(data[k1][k2])
-				sum += i + 1
+		for k2, _ := range v1 {
+			if checkLowest(data, k1, k2) {
 				res := []int{k1, k2}
 				lowestPoints = append(lowestPoints, res)
 			}
 		}
 	}
-	return sum, lowestPoints
+	return lowestPoints
 }
 
-func getThreeLargestBasins(data [][]string, lows [][]int) int {
+func getThreeLargestBasins(data [][]string) int {
+	lows := getLowestPoints(data)
 	basins := []int{}
+
 	for _, v := range lows {
 		basinSize := countBasinSize(data, v)
 		basins = append(basins, basinSize)
@@ -120,9 +129,6 @@ func main() {
 		data = append(data, l)
 	}
 
-	sum1, lowestPoints := sumLowPoints(data)
-	sum2 := getThreeLargestBasins(data, lowestPoints)
-
-	fmt.Printf("First answer: %v \n", sum1)
-	fmt.Printf("Second answer: %v \n", sum2)
+	fmt.Printf("First answer: %v \n", heightmapLowPoints(data))
+	fmt.Printf("Second answer: %v \n", getThreeLargestBasins(data))
 }
