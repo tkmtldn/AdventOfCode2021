@@ -58,12 +58,11 @@ func main() {
 
 	LOOP:
 		for _, x := range line {
-			if x == 40 || x == 60 || x == 91 || x == 123 {
+			switch x {
+			case 40, 60, 91, 123:
 				last = int(x)
 				cal = append(cal, x)
-			}
-			if x == 41 {
-				//()
+			case 41:
 				if last != 40 {
 					result1 += 3
 					isComplete = true
@@ -71,9 +70,7 @@ func main() {
 				} else {
 					last, cal = pop(cal)
 				}
-			}
-			if x == 62 {
-				//<>
+			case 62:
 				if last != 60 {
 					result1 += 25137
 					isComplete = true
@@ -81,9 +78,7 @@ func main() {
 				} else {
 					last, cal = pop(cal)
 				}
-			}
-			if x == 93 {
-				//[]
+			case 93:
 				if last != 91 {
 					result1 += 57
 					isComplete = true
@@ -91,9 +86,7 @@ func main() {
 				} else {
 					last, cal = pop(cal)
 				}
-			}
-			if x == 125 {
-				//{}
+			case 125:
 				if last != 123 {
 					result1 += 1197
 					isComplete = true
