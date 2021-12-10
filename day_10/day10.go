@@ -8,6 +8,17 @@ import (
 	"sort"
 )
 
+func pop(h []int32) (int, []int32){
+	last := 0
+	if len(h) < 2 {
+		h = []int32{}
+	} else {
+		last = int(h[len(h)-2])
+		h = h[:len(h)-1]
+	}
+	return last, h
+}
+
 func sumLine(s []int32) (sum int) {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
@@ -43,7 +54,7 @@ func main() {
 		line := fileScanner.Text()
 		last := 0
 		cal := []int32{}
-		failed := false
+		isComplete := false
 
 	LOOP:
 		for _, x := range line {
@@ -55,59 +66,45 @@ func main() {
 				//()
 				if last != 40 {
 					result1 += 3
-					failed = true
+					isComplete = true
 					break LOOP
 				} else {
-					last = int(cal[len(cal)-2])
-					cal = cal[:len(cal)-1]
+					last, cal = pop(cal)
 				}
 			}
 			if x == 62 {
 				//<>
 				if last != 60 {
 					result1 += 25137
-					failed = true
+					isComplete = true
 					break LOOP
 				} else {
-					last = int(cal[len(cal)-2])
-					cal = cal[:len(cal)-1]
+					last, cal = pop(cal)
 				}
 			}
 			if x == 93 {
 				//[]
 				if last != 91 {
 					result1 += 57
-					failed = true
+					isComplete = true
 					break LOOP
 				} else {
-					if len(cal) < 2 {
-						last = 0
-						cal = []int32{}
-					} else {
-						last = int(cal[len(cal)-2])
-						cal = cal[:len(cal)-1]
-					}
+					last, cal = pop(cal)
 				}
 			}
 			if x == 125 {
 				//{}
 				if last != 123 {
 					result1 += 1197
-					failed = true
+					isComplete = true
 					break LOOP
 				} else {
-					if len(cal) < 2 {
-						last = 0
-						cal = []int32{}
-					} else {
-						last = int(cal[len(cal)-2])
-						cal = cal[:len(cal)-1]
-					}
+					last, cal = pop(cal)
 				}
 			}
 		}
 
-		if !failed {
+		if !isComplete {
 			result2 = append(result2, sumLine(cal))
 		}
 	}
