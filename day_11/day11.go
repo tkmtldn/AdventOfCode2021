@@ -51,32 +51,48 @@ func getNeighbourhood(data [][]int, y int, x int) [][]int {
 	return adjLoc
 }
 
-func first(data [][]int) {
-	for x := 0; x < 3; x++ {
-		fmt.Println(data)
-		// First, the energy level of each octopus increases by 1.
+func task(data [][]int) (ans1 int, ans2 int) {
+	flashed := 0
+LOOP:
+	for x := 1; x < 1000; x++ {
+		cur_flashed := 0
 		for k1, v := range data {
 			for k2, _ := range v {
 				data[k1][k2]++
 			}
 		}
-		// Then, any octopus with an energy level greater than 9 flashes.
-		// This increases the energy level of all adjacent octopuses by 1,
-		// including octopuses that are diagonally adjacent. If this causes
-		// an octopus to have an energy level greater than 9, it also flashes.
-		// This process continues as long as new octopuses keep having their
-		// energy level increased beyond 9. (An octopus can only flash at most once per step.)
-		flashedSum := 0
-		for k1, v := range data {
-			for k2, _ := range v {
-				if data[k1][k2] > 9 {
-					flashedSum++
+		for {
+			neighbours := [][]int{}
+			for k1, v := range data {
+				for k2, _ := range v {
+					if data[k1][k2] > 9 {
+						neighbours = append(neighbours, getNeighbourhood(data, k1, k2)...)
+						data[k1][k2] = 0
+						cur_flashed++
+					}
+				}
+			}
+			if len(neighbours) == 0 {
+				break
+			}
+			for _, v := range neighbours {
+				if data[v[0]][v[1]] == 0 {
+					continue
+				} else {
+					data[v[0]][v[1]]++
 				}
 			}
 		}
-		// Finally, any octopus that flashed during this step has its energy
-		// level set to 0, as it used all of its energy to flash.
+		flashed += cur_flashed
+		if x == 100 {
+			ans1 = flashed
+		}
+		if cur_flashed == 100 {
+			ans2 = x
+			break LOOP
+		}
 	}
+	return ans1, ans2
 }
 
 func getData(fileHandle io.Reader) [][]int {
@@ -96,14 +112,14 @@ func getData(fileHandle io.Reader) [][]int {
 }
 
 func main() {
-	path := filepath.Join(".", "day_11", "testinput.txt")
+	path := filepath.Join(".", "day_11", "input.txt")
 	fileHandle, _ := os.Open(path)
 	defer fileHandle.Close()
 
 	data := getData(fileHandle)
 
-	first(data)
+	ans1, ans2 := task(data)
 
-	fmt.Printf("First answer: %v \n", )
-	fmt.Printf("Second answer: %v \n", )
+	fmt.Printf("First answer: %v \n", ans1)
+	fmt.Printf("Second answer: %v \n", ans2)
 }
